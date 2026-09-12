@@ -107,40 +107,44 @@ const docRef = doc(db, "wishlist", "main");
 let items = [];
 
 // ============================================================
-// IMAGES — PASTE YOUR BASE64 OR URL INSIDE THE QUOTES
+// IMAGES — URLs point to your new repo: babyzoda/babyzoda.github.io
 // ============================================================
-// Each key matches an image you want to show. Leave "" if empty.
-// You can paste either:
-//   - a base64 data string:  "data:image/jpeg;base64,/9j/4AAQ..."
-//   - or a URL:              "https://i.imgur.com/abc123.jpg"
-//
 const IMAGES = {
-  // priority ticket (unnamed — shows the SVG icon instead)
-  // You can put an image here if you want it instead of the ticket icon:
   navai: "",
 
-  // Намазник 🤍 — paste your namaznik base64 or URL here:
-  namaznik: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/namaznik.jpg",
-  // Сумочка ✨ — up to 5 bag photos
-  bag1: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/bag1.jpg", bag2: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/bag2.jpg", bag3: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/bag3.jpg", bag4: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/bag4.jpg", bag5: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/bag5.jpg",
+  namaznik: "https://github.com/babyzoda/babyzoda.github.io/raw/main/namaznik.jpg",
 
-  // Набор TIGI — up to 4 photos
-  i1: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/i1.jpg", i2: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/i2.jpg", i3: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/i3.jpg", i4: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/i4.jpg",
-goldenapple: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/goldenapple.jpg",
-  // Кроссовки New Balance 530
-  i6: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/i6.jpg",
+  bag1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag1.jpg",
+  bag2: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag2.jpg",
+  bag3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag3.jpg",
+  bag4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag4.jpg",
+  bag5: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag5.jpg",
 
-  // Сертификат TRY ME 💗
-  tryme1: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/tryme1.jpg",
+  i1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i1.jpg",
+  i2: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i2.jpg",
+  i3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i3.jpg",
+  i4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i4.jpg",
 
-  // Книги Халеда Хоссейни
-  b1: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b1.jpg", b2: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b2.jpg",
+  goldenapple: "https://github.com/babyzoda/babyzoda.github.io/raw/main/goldenapple.jpg",
 
-  // Книги серия «Магистраль»
-  b3: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b3.jpg", b4: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b4.jpg", b5: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b5.jpg", b6: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b6.jpg", b7: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b7.jpg", b8: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b8.jpg", b9: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/b9.jpg",
+  i6: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i6.jpg",
 
-  // Агата Кристи
-  ac_a: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/ac_a.jpg", ac_b: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/ac_b.jpg", ac_c: "https://github.com/ergashvaevmansur-tech/wishlist/raw/main/ac_c.jpg"
+  tryme1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/tryme1.jpg",
+
+  b1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b1.jpg",
+  b2: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b2.jpg",
+
+  b3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b3.jpg",
+  b4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b4.jpg",
+  b5: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b5.jpg",
+  b6: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b6.jpg",
+  b7: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b7.jpg",
+  b8: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b8.jpg",
+  b9: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b9.jpg",
+
+  ac_a: "https://github.com/babyzoda/babyzoda.github.io/raw/main/ac_a.jpg",
+  ac_b: "https://github.com/babyzoda/babyzoda.github.io/raw/main/ac_b.jpg",
+  ac_c: "https://github.com/babyzoda/babyzoda.github.io/raw/main/ac_c.jpg"
 };
 
 const DEFAULT_ITEMS = [
