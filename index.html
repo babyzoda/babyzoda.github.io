@@ -35,8 +35,6 @@
   .item.priority .item-title { color: var(--rose-dark); }
   .item-title { font-weight: 600; font-size: 1.05rem; margin: 0 0 2px; cursor: pointer; }
   .item-note { font-size: 0.85rem; color: var(--rose-dark); opacity: 0.8; margin: 0; }
-  .thumb-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .strip-photo { width: 46px; height: 46px; border-radius: 8px; object-fit: cover; border: 1px solid var(--blush); }
   .tag { position: absolute; top: 14px; right: 16px; font-size: 0.72rem; font-weight: 700; text-transform: lowercase; color: var(--gold); opacity: 0.85; }
   .item.got .tag { color: var(--rose); }
   .tag.multi { color: var(--lavender); opacity: 1; }
@@ -45,7 +43,7 @@
   .lightbox { display: none; position: fixed; inset: 0; background: rgba(20, 10, 15, 0.85); z-index: 999; align-items: center; justify-content: center; cursor: zoom-out; padding: 24px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   .lightbox.open { display: flex; }
   .lightbox img { max-width: 95vw; max-height: 95vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); cursor: default; }
-  .item-photo, .item-photo-grid, .strip-photo { cursor: zoom-in; }
+  .item-photo, .item-photo-grid { cursor: zoom-in; }
 </style>
 </head>
 <body>
@@ -106,12 +104,7 @@ const docRef = doc(db, "wishlist", "main");
 
 let items = [];
 
-// ============================================================
-// IMAGES
-// ============================================================
 const IMAGES = {
-  navai: "",
-
   namaznik: "https://github.com/babyzoda/babyzoda.github.io/raw/main/namaznik.jpg",
 
   bag1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag1.jpg",
@@ -121,14 +114,11 @@ const IMAGES = {
   bag5: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag5.jpg",
 
   goldenapple: "https://github.com/babyzoda/babyzoda.github.io/raw/main/goldenapple.jpg",
-
   i6: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i6.jpg",
-
   tryme1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/tryme1.jpg",
 
   b1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b1.jpg",
   b2: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b2.jpg",
-
   b3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b3.jpg",
   b4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b4.jpg",
   b5: "https://github.com/babyzoda/babyzoda.github.io/raw/main/b5.jpg",
@@ -142,6 +132,7 @@ const IMAGES = {
   ac_c: "https://github.com/babyzoda/babyzoda.github.io/raw/main/ac_c.jpg"
 };
 
+// Every single item and book is now its own independent object with its own id and reserve button
 const DEFAULT_ITEMS = [
   { id: 'navai-ticket', text: '🎫 Билет на концерт Наваи', note: '8 октября, Ташкент — за день до моего ДР (9-го)! Самое главное желание', reserved: false, priority: true },
   { id: 'dress1', images: ['namaznik'], text: 'Намазник 🤍', note: 'было бы приятно получить что-то подобное в подарок', reserved: false },
@@ -150,20 +141,33 @@ const DEFAULT_ITEMS = [
   { id: 'aikerim-cert', text: 'Сертификат в aikerim 💌', note: 'на любую сумму', reserved: false, multiple: true },
   { id: 'tryme-cert', images: ['tryme1'], text: 'Сертификат TRY ME 💗', note: 'на любую сумму', reserved: false, multiple: true },
   { id: 'i6', text: 'Кроссовки New Balance 530', note: 'белые с серебром — важны именно этот цвет и размер(37.5), в Стамбуле и Шымкенте не нашла', reserved: false },
-  { id: 'khaled-set', images: ['b1','b2'], text: 'Книги Халеда Хоссейни 📚', note: 'Тысяча сияющих солнц · Бегущий за ветром', reserved: false },
-  { id: 'books-set', images: ['b3','b4','b5','b6','b7','b8','b9'], text: 'Книги, серия «Магистраль» (Эксмо)', note: 'важна именно эта серия/оформление — Граф Монте-Кристо (2 тома), Джейн Эйр, Энн из Зелёных Мезонинов, Поллианна, Идиот, Илиада, Грозовой перевал, Хорошие жёны', reserved: false },
-  { id: 'agatha-set', images: ['ac_a','ac_b','ac_c'], text: 'Агата Кристи, новые книги', note: 'По направлению к нулю · Смерть приходит в конце · Почему не Эванс?', reserved: false }
+  
+  // Khaled Hosseini books separated individually
+  { id: 'khaled-1', images: ['b1'], text: 'Халед Хоссейни — Тысяча сияющих солнц 📚', note: 'книга', reserved: false },
+  { id: 'khaled-2', images: ['b2'], text: 'Халед Хоссейни — Бегущий за ветром 📚', note: 'книга', reserved: false },
+
+  // Magistral series books separated individually
+  { id: 'mag-1', images: ['b3'], text: 'Граф Монте-Кристо (2 тома) — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-2', images: ['b4'], text: 'Джейн Эйр — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-3', images: ['b5'], text: 'Энн из Зелёных Мезонинов — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-4', images: ['b6'], text: 'Поллианна — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-5', images: ['b7'], text: 'Идиот — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-6', images: ['b8'], text: 'Илиада — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-7', images: ['b9'], text: 'Грозовой перевал — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+  { id: 'mag-8', images: ['b9'], text: 'Хорошие жёны — серия «Магистраль»', note: 'оформление Эксмо', reserved: false },
+
+  // Agatha Christie books separated individually
+  { id: 'agatha-1', images: ['ac_a'], text: 'Агата Кристи — По направлению к нулю', note: 'новое издание', reserved: false },
+  { id: 'agatha-2', images: ['ac_b'], text: 'Агата Кристи — Смерть приходит в конце', note: 'новое издание', reserved: false },
+  { id: 'agatha-3', images: ['ac_c'], text: 'Агата Кристи — Почему не Эванс?', note: 'новое издание', reserved: false }
 ];
 
-// ============================================================
-// FIRESTORE
-// ============================================================
 async function loadAll() {
   try {
     const snap = await getDoc(docRef);
     if (snap.exists() && Array.isArray(snap.data().list)) {
       items = snap.data().list;
-      // If Firestore already stored the old list including tigi-set, filter it out dynamically
+      // Filter out old tigi item just in case
       items = items.filter(it => it.id !== 'tigi-set');
     } else {
       items = DEFAULT_ITEMS;
@@ -184,9 +188,6 @@ async function saveItems() {
   }
 }
 
-// ============================================================
-// LIGHTBOX
-// ============================================================
 window.openLightbox = function(src) {
   if (!src) return;
   document.getElementById('lightbox-img').src = src;
@@ -199,9 +200,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLightbox();
 });
 
-// ============================================================
-// RENDER
-// ============================================================
 function render() {
   const list = document.getElementById('list');
   list.innerHTML = '';
@@ -211,26 +209,17 @@ function render() {
     let photoHtml = '';
     if (it.priority) {
       photoHtml = `<svg class="item-photo" viewBox="0 0 64 64" style="background:var(--rose);"><path d="M10 24 a4 4 0 0 0 0 -8 v-4 a4 4 0 0 1 4 -4 h36 a4 4 0 0 1 4 4 v4 a4 4 0 0 0 0 8 v16 a4 4 0 0 0 0 8 v4 a4 4 0 0 1 -4 4 h-36 a4 4 0 0 1 -4 -4 v-4 a4 4 0 0 0 0 -8 z" fill="none" stroke="white" stroke-width="2"/><line x1="24" y1="10" x2="24" y2="54" stroke="white" stroke-width="2" stroke-dasharray="3,3"/></svg>`;
-    } else if (it.images && it.images.length > 1 && it.images.length <= 4) {
-      const cols = it.images.length === 4 ? 2 : it.images.length;
-      const thumbs = it.images.map(id => IMAGES[id] ? `<img class="item-photo grid" src="${IMAGES[id]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[id]}')">` : '').join('');
-      if (thumbs) {
-        photoHtml = `<div class="item-photo-grid" style="grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: ${it.images.length === 4 ? '1fr 1fr' : '1fr'};">${thumbs}</div>`;
-      }
     } else if (it.images && it.images.length === 1 && IMAGES[it.images[0]]) {
       photoHtml = `<img class="item-photo" src="${IMAGES[it.images[0]]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[it.images[0]]}')">`;
     } else if (IMAGES[it.id]) {
       photoHtml = `<img class="item-photo" src="${IMAGES[it.id]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[it.id]}')">`;
     }
-    const stripHtml = (it.images && it.images.length > 4)
-      ? `<div class="thumb-strip">${it.images.map(id => IMAGES[id] ? `<img class="strip-photo" src="${IMAGES[id]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[id]}')">` : '').join('')}</div>`
-      : '';
+    
     div.innerHTML = `
       ${photoHtml}
       <div class="item-text">
         <p class="item-title">${escapeHtml(it.text)}</p>
         ${it.note ? `<p class="item-note">${escapeHtml(it.note)}</p>` : ''}
-        ${stripHtml}
       </div>
       ${it.multiple ? '<span class="tag multi">можно нескольким</span>' : `<span class="tag">${it.reserved ? 'забронировано' : 'свободно'}</span>`}
     `;
@@ -259,9 +248,6 @@ async function toggleReserved(id) {
   }
 }
 
-// ============================================================
-// BACKGROUND DECORATION
-// ============================================================
 (function drawBg() {
   const svg = document.getElementById('bgDeco');
   svg.setAttribute('viewBox', '0 0 400 800');
