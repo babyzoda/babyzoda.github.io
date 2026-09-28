@@ -107,7 +107,7 @@ const docRef = doc(db, "wishlist", "main");
 let items = [];
 
 // ============================================================
-// IMAGES — URLs point to your new repo: babyzoda/babyzoda.github.io
+// IMAGES
 // ============================================================
 const IMAGES = {
   navai: "",
@@ -119,11 +119,6 @@ const IMAGES = {
   bag3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag3.jpg",
   bag4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag4.jpg",
   bag5: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag5.jpg",
-
-  i1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i1.jpg",
-  i2: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i2.jpg",
-  i3: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i3.jpg",
-  i4: "https://github.com/babyzoda/babyzoda.github.io/raw/main/i4.jpg",
 
   goldenapple: "https://github.com/babyzoda/babyzoda.github.io/raw/main/goldenapple.jpg",
 
@@ -151,7 +146,6 @@ const DEFAULT_ITEMS = [
   { id: 'navai-ticket', text: '🎫 Билет на концерт Наваи', note: '8 октября, Ташкент — за день до моего ДР (9-го)! Самое главное желание', reserved: false, priority: true },
   { id: 'dress1', images: ['namaznik'], text: 'Намазник 🤍', note: 'было бы приятно получить что-то подобное в подарок', reserved: false },
   { id: 'bags-set', images: ['bag1','bag2','bag3','bag4','bag5'], text: 'Сумочка ✨', note: 'в таком стиле (мини-бокс на цепочке) или на ваше усмотрение — только без крупных логотипов бренда', reserved: false },
-  { id: 'tigi-set', images: ['i1','i2','i3','i4'], text: 'Набор TIGI Bed Head', note: 'Queen For A Day (объём) · After Party (крем) · Some Like It Hot (термозащита) · Master Piece (лак)', reserved: false },
   { id: 'i5', images: ['goldenapple'], text: 'Сертификат Золотое Яблоко 💛', note: 'на любую сумму ♡', reserved: false, multiple: true },
   { id: 'aikerim-cert', text: 'Сертификат в aikerim 💌', note: 'на любую сумму', reserved: false, multiple: true },
   { id: 'tryme-cert', images: ['tryme1'], text: 'Сертификат TRY ME 💗', note: 'на любую сумму', reserved: false, multiple: true },
@@ -169,6 +163,8 @@ async function loadAll() {
     const snap = await getDoc(docRef);
     if (snap.exists() && Array.isArray(snap.data().list)) {
       items = snap.data().list;
+      // If Firestore already stored the old list including tigi-set, filter it out dynamically
+      items = items.filter(it => it.id !== 'tigi-set');
     } else {
       items = DEFAULT_ITEMS;
       await saveItems();
