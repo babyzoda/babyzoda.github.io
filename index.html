@@ -25,7 +25,7 @@
   .item:nth-child(3n+1) { border-left-color: var(--rose); }
   .item:nth-child(3n+2) { border-left-color: var(--gold); }
   .item:nth-child(3n)   { border-left-color: var(--lavender); }
-  .item-photo { width: 64px; height: 64px; flex-shrink: 0; border-radius: 10px; object-fit: cover; background: var(--cream); border: 1px symbol var(--blush); }
+  .item-photo { width: 64px; height: 64px; flex-shrink: 0; border-radius: 10px; object-fit: cover; background: var(--cream); border: 1px solid var(--blush); }
   .item-text { min-width: 0; }
   .item.got { opacity: 0.55; }
   .item.got .item-title { text-decoration: line-through; text-decoration-color: var(--rose); }
@@ -98,12 +98,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const docRef = doc(db, "wishlist", "main-v5");
+const docRef = doc(db, "wishlist", "main-v6");
 
 let items = [];
 
 const IMAGES = {
-  basta: "https://github.com/babyzoda/babyzoda.github.io/raw/main/basta.jpg", // Replace or add your basta photo to your github repo
+  basta: "https://github.com/babyzoda/babyzoda.github.io/raw/main/basta.jpg",
   namaznik: "https://github.com/babyzoda/babyzoda.github.io/raw/main/namaznik.jpg",
 
   bag1: "https://github.com/babyzoda/babyzoda.github.io/raw/main/bag1.jpg",
