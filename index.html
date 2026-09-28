@@ -100,8 +100,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const docRef = doc(db, "wishlist", "main");
-
+const docRef = doc(db, "wishlist", "main-v3");
 let items = [];
 
 const IMAGES = {
