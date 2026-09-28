@@ -98,9 +98,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const docRef = doc(db, "wishlist", "main-v6");
-
-let items = [];
+const docRef = doc(db, "wishlist", "main-v7");
 
 const IMAGES = {
   basta: "https://github.com/babyzoda/babyzoda.github.io/raw/main/basta.jpg",
@@ -161,20 +159,21 @@ const DEFAULT_ITEMS = [
   { id: 'agatha-3', images: ['ac_c'], text: 'Агата Кристи — Почему не Эванс?', note: 'новое издание', reserved: false }
 ];
 
-async function loadAll() {
+let items = DEFAULT_ITEMS;
+render(); // Render immediately so page is never blank!
+
+async function initSync() {
   try {
     const snap = await getDoc(docRef);
     if (snap.exists() && Array.isArray(snap.data().list)) {
       items = snap.data().list;
+      render();
     } else {
-      items = DEFAULT_ITEMS;
-      await saveItems();
+      await setDoc(docRef, { list: DEFAULT_ITEMS });
     }
   } catch (e) {
-    console.error('load failed', e);
-    items = DEFAULT_ITEMS;
+    console.warn('Firebase sync skipped, using local items:', e);
   }
-  render();
 }
 
 async function saveItems() {
@@ -258,7 +257,7 @@ async function toggleReserved(id) {
   svg.innerHTML = shapes;
 })();
 
-loadAll();
+initSync();
 </script>
 
 </body>
