@@ -98,7 +98,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const docRef = doc(db, "wishlist", "main-v7");
+const docRef = doc(db, "wishlist", "main-v8");
 
 const IMAGES = {
   basta: "https://github.com/babyzoda/babyzoda.github.io/raw/main/basta.jpg",
@@ -160,19 +160,23 @@ const DEFAULT_ITEMS = [
 ];
 
 let items = DEFAULT_ITEMS;
-render(); // Render immediately so page is never blank!
+render(); // Renders instantly so the page is never blank
 
-async function initSync() {
+async function loadAll() {
   try {
     const snap = await getDoc(docRef);
-    if (snap.exists() && Array.isArray(snap.data().list)) {
+    if (snap.exists() && snap.data() && Array.isArray(snap.data().list) && snap.data().list.length > 0) {
       items = snap.data().list;
       render();
     } else {
+      items = DEFAULT_ITEMS;
+      render();
       await setDoc(docRef, { list: DEFAULT_ITEMS });
     }
   } catch (e) {
     console.warn('Firebase sync skipped, using local items:', e);
+    items = DEFAULT_ITEMS;
+    render();
   }
 }
 
@@ -257,7 +261,7 @@ async function toggleReserved(id) {
   svg.innerHTML = shapes;
 })();
 
-initSync();
+loadAll();
 </script>
 
 </body>
