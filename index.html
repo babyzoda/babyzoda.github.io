@@ -199,7 +199,7 @@ function render() {
     div.className = 'item' + (it.reserved ? ' got' : '') + (it.priority ? ' priority' : '');
     let photoHtml = '';
     if (it.images && it.images.length === 1 && IMAGES[it.images[0]]) {
-      photoHtml = `<img class="item-photo" src="${IMAGES[it.images[0]]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[it.images[0]}')">`;
+      photoHtml = `<img class="item-photo" src="${IMAGES[it.images[0]]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[it.images[0]')">`;
     } else if (IMAGES[it.id]) {
       photoHtml = `<img class="item-photo" src="${IMAGES[it.id]}" alt="" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightbox('${IMAGES[it.id]}')">`;
     }
